@@ -19,12 +19,12 @@ export default function Ventas() {
   // Cargar productos y categorías
   useEffect(() => {
     axios
-      .get("http://localhost:8500/api/productos")
+      .get(`${import.meta.env.VITE_API_URL}/productos`)
       .then((res) => setProductos(res.data))
       .catch(() => console.error("Error al cargar productos"));
 
     axios
-      .get("http://localhost:8500/api/categorias")
+      .get(`${import.meta.env.VITE_API_URL}/categorias`)
       .then((res) => setCategorias(res.data))
       .catch(() => console.error("Error al cargar categorías"));
   }, []);
@@ -124,7 +124,7 @@ export default function Ventas() {
 
     try {
       const res = await axios.post(
-        "http://localhost:8500/api/ventas/registrar",
+        `${import.meta.env.VITE_API_URL}/ventas/registrar`,
         venta
       );
       alert("Venta registrada con éxito");

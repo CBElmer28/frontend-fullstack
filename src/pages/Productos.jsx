@@ -4,8 +4,8 @@ import ModalProducto from '../components/ModalProducto';
 import ModalCategoria from '../components/ModalCategoria';
 import { PencilIcon, TrashIcon, ArchiveBoxIcon, ChevronLeftIcon, ChevronRightIcon } from '@heroicons/react/24/outline';
 
-const API_PRODUCTS = 'http://localhost:8500/api/productos';
-const API_CATEGORIES = 'http://localhost:8500/api/categorias';
+const API_PRODUCTS = `${import.meta.env.VITE_API_URL}/productos`;
+const API_CATEGORIES = `${import.meta.env.VITE_API_URL}/categorias`;
 const PAGE_SIZE = 20;
 
 export default function Productos() {

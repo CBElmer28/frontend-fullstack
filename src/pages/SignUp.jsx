@@ -80,7 +80,7 @@
 //     setError("");
 
 //     try {
-//       const response = await fetch("http://localhost:8500/api/auth/register", {
+//       const response = await fetch("${import.meta.env.VITE_API_URL}/auth/register", {
 //         method: "POST",
 //         headers: { "Content-Type": "application/json" },
 //         body: JSON.stringify({
@@ -141,7 +141,7 @@
 //     const email = localStorage.getItem("emailPendiente");
 
 //     try {
-//       const response = await fetch("http://localhost:8500/api/auth/verificar", {
+//       const response = await fetch("${import.meta.env.VITE_API_URL}/auth/verificar", {
 //         method: "POST",
 //         headers: { "Content-Type": "application/json" },
 //         body: JSON.stringify({
@@ -176,7 +176,7 @@
 //     const email = localStorage.getItem("emailPendiente");
     
 //     try {
-//       const response = await fetch("http://localhost:8500/api/auth/reenviar-codigo", {
+//       const response = await fetch("${import.meta.env.VITE_API_URL}/auth/reenviar-codigo", {
 //         method: "POST",
 //         headers: { "Content-Type": "application/json" },
 //         body: JSON.stringify({
@@ -556,7 +556,7 @@ export default function SignUp() {
     setError('');
 
     try {
-      const response = await fetch('http://localhost:8500/api/auth/register', {
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/auth/register`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -589,7 +589,7 @@ export default function SignUp() {
     setError('');
 
     try {
-      const response = await fetch('http://localhost:8500/api/auth/verificar', {
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/auth/verificar`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -622,7 +622,7 @@ export default function SignUp() {
     setError('');
 
     try {
-      const response = await fetch('http://localhost:8500/api/auth/reenviar-codigo', {
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/auth/reenviar-codigo`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
