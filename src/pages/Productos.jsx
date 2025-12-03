@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from 'react';
-import axios from 'axios';
+import api from '../services/api';
 import ModalProducto from '../components/ModalProducto';
 import ModalCategoria from '../components/ModalCategoria';
 import { PencilIcon, TrashIcon, ArchiveBoxIcon, ChevronLeftIcon, ChevronRightIcon } from '@heroicons/react/24/outline';
 
-const API_PRODUCTS = `${import.meta.env.VITE_API_URL}/productos`;
-const API_CATEGORIES = `${import.meta.env.VITE_API_URL}/categorias`;
+const API_PRODUCTS = "/productos";
+const API_CATEGORIES = "/categorias";
 const PAGE_SIZE = 20;
 
 export default function Productos() {
@@ -22,7 +22,7 @@ export default function Productos() {
 
   const fetchCategories = async () => {
     try {
-      const res = await axios.get(API_CATEGORIES);
+      const res = await api.get(API_CATEGORIES);
       setCategories(res.data || []);
     } catch (err) {
       console.error('Error fetching categories', err);
@@ -32,7 +32,7 @@ export default function Productos() {
   const fetchProductos = async () => {
     setLoading(true);
     try {
-      const res = await axios.get(API_PRODUCTS);
+      const res = await api.get(API_PRODUCTS);
       const all = res.data || [];
       const filtered = all.filter(p => {
         if (!query) return true;
@@ -74,11 +74,11 @@ export default function Productos() {
       if (imagenFile) form.append('imagen', imagenFile);
 
       if (producto.idProducto) {
-        const res = await axios.put(`${API_PRODUCTS}/${producto.idProducto}`, form, {
+        const res = await api.put(`${API_PRODUCTS}/${producto.idProducto}`, form, {
           headers: { 'Content-Type': 'multipart/form-data' }
         });
       } else {
-        const res = await axios.post(API_PRODUCTS, form, {
+        const res = await api.post(API_PRODUCTS, form, {
           headers: { 'Content-Type': 'multipart/form-data' }
         });
       }
@@ -95,7 +95,7 @@ export default function Productos() {
   const handleDeleteProducto = async (id) => {
     if (!confirm('¿Eliminar producto? Esta acción no se puede deshacer.')) return;
     try {
-      await axios.delete(`${API_PRODUCTS}/${id}`);
+      await api.delete(`${API_PRODUCTS}/${id}`);
       await fetchProductos();
     } catch (err) {
       console.error(err);
@@ -108,7 +108,7 @@ export default function Productos() {
       const updated = { ...producto, estado: !producto.estado };
       const form = new FormData();
       form.append('producto', new Blob([JSON.stringify(updated)], { type: 'application/json' }));
-      await axios.put(`${API_PRODUCTS}/${producto.idProducto}`, form, {
+      await api.put(`${API_PRODUCTS}/${producto.idProducto}`, form, {
         headers: { 'Content-Type': 'multipart/form-data' }
       });
       await fetchProductos();
@@ -120,12 +120,12 @@ export default function Productos() {
 
   const handleUpdateStock = async (id, newStock) => {
     try {
-      const res = await axios.get(`${API_PRODUCTS}/${id}`);
+      const res = await api.get(`${API_PRODUCTS}/${id}`);
       const prod = res.data;
       prod.stock = Number(newStock);
       const form = new FormData();
       form.append('producto', new Blob([JSON.stringify(prod)], { type: 'application/json' }));
-      await axios.put(`${API_PRODUCTS}/${id}`, form, {
+      await api.put(`${API_PRODUCTS}/${id}`, form, {
         headers: { 'Content-Type': 'multipart/form-data' }
       });
       await fetchProductos();

@@ -1,7 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { DocumentTextIcon, EyeIcon, XMarkIcon } from "@heroicons/react/24/outline";
+import { useAuth } from "../context/AuthContext";
 
 export default function Reportes() {
+  const { authFetch } = useAuth();
+
   const [ventas, setVentas] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -9,7 +12,7 @@ export default function Reportes() {
   const [detalleSeleccionado, setDetalleSeleccionado] = useState(null);
 
   useEffect(() => {
-    fetch(`${import.meta.env.VITE_API_URL}/ventas/listar`)
+    authFetch(`${import.meta.env.VITE_API_URL}/ventas/listar`)
       .then((res) => {
         if (!res.ok) throw new Error("Error en la respuesta del servidor");
         return res.json();

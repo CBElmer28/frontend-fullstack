@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import axios from "axios";
+import api from "../services/api";
 import MetodoPago from "../components/MetodoPago";
 import { ShoppingCart, PlusIcon, MinusIcon, TrashIcon } from "lucide-react";
 
@@ -18,13 +18,13 @@ export default function Ventas() {
 
   // Cargar productos y categorías
   useEffect(() => {
-    axios
-      .get(`${import.meta.env.VITE_API_URL}/productos`)
+    api
+      .get("/productos")
       .then((res) => setProductos(res.data))
       .catch(() => console.error("Error al cargar productos"));
 
-    axios
-      .get(`${import.meta.env.VITE_API_URL}/categorias`)
+    api
+      .get("/categorias")
       .then((res) => setCategorias(res.data))
       .catch(() => console.error("Error al cargar categorías"));
   }, []);
@@ -123,8 +123,8 @@ export default function Ventas() {
     };
 
     try {
-      const res = await axios.post(
-        `${import.meta.env.VITE_API_URL}/ventas/registrar`,
+      const res = await api.post(
+        "/ventas/registrar",
         venta
       );
       alert("Venta registrada con éxito");

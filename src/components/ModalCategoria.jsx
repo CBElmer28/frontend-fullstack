@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
-import axios from 'axios';
+import api from '../services/api';
 
-const API_CATEGORIES = `${import.meta.env.VITE_API_URL}/categorias`;
+const API_CATEGORIES = "/categorias";
 
 export default function ModalCategoria({ open, onClose, onCreated }) {
   const [nombre, setNombre] = useState('');
@@ -15,7 +15,7 @@ export default function ModalCategoria({ open, onClose, onCreated }) {
     setSaving(true);
     try {
       const payload = { categoria: nombre };
-      await axios.post(API_CATEGORIES, payload);
+      await api.post(API_CATEGORIES, payload);
       setNombre('');
       if (onCreated) onCreated();
     } catch (err) {
