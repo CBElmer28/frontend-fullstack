@@ -66,29 +66,43 @@ export default function Productos() {
     fetchProductos();
   }, [page, query]);
 
-  const handleSaveProducto = async (producto, imagenFile) => {
+  const handleSaveProducto = async (productoData, imagenFile) => {
     try {
-      const form = new FormData();
-      const jsonBlob = new Blob([JSON.stringify(producto)], { type: 'application/json' });
-      form.append('producto', jsonBlob);
-      if (imagenFile) form.append('imagen', imagenFile);
+      const formData = new FormData();
 
-      if (producto.idProducto) {
-        const res = await api.put(`${API_PRODUCTS}/${producto.idProducto}`, form, {
-          headers: { 'Content-Type': 'multipart/form-data' }
-        });
-      } else {
-        const res = await api.post(API_PRODUCTS, form, {
-          headers: { 'Content-Type': 'multipart/form-data' }
-        });
+      // 1. Backend espera la parte "producto" como un JSON con Content-Type específico
+      // Es vital usar 'new Blob' con type 'application/json' para que Spring Boot lo deserialice
+      formData.append(
+        'producto',
+        new Blob([JSON.stringify(productoData)], { type: 'application/json' })
+      );
+
+      // 2. Backend espera la parte "imagen" como archivo (si existe)
+      if (imagenFile) {
+        formData.append('imagen', imagenFile);
       }
 
+      // 3. Determinar si es Crear (POST) o Actualizar (PUT)
+      if (productoData.idProducto) {
+        // Actualizar
+        await api.put(`${API_PRODUCTS}/${productoData.idProducto}`, formData, {
+          headers: {
+            // No establezcas 'Content-Type': 'multipart/form-data' manualmente,
+            // axios/fetch lo hace automáticamente con el boundary correcto.
+          },
+        });
+      } else {
+        // Crear nuevo
+        await api.post(API_PRODUCTS, formData);
+      }
+
+      // Recargar la lista y cerrar modal
       await fetchProductos();
       setShowModalProducto(false);
       setEditingProducto(null);
     } catch (err) {
-      console.error('Error saving producto', err);
-      alert('Error al guardar el producto. Revisa la consola.');
+      console.error('Error al guardar producto:', err);
+      // Aquí podrías mostrar un mensaje de error al usuario
     }
   };
 
@@ -210,7 +224,7 @@ export default function Productos() {
                         </td>
                         <td className="px-4 py-2 text-sm">{p.categoria?.categoria}</td>
                         <td className="px-4 py-2 text-sm">
-                          <img src={`https://backend-tiendaropa-jik5.onrender.com${p.imagen}`} alt={p.producto} className="h-10 w-10 object-cover rounded"/>
+                          <img src={p.imagen} alt={p.producto} className="h-10 w-10 object-cover rounded"/>
                         </td>
                         <td className="px-4 py-2 text-sm">
                           <label className="inline-flex items-center gap-2">
