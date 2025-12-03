@@ -224,7 +224,15 @@ export default function Productos() {
                         </td>
                         <td className="px-4 py-2 text-sm">{p.categoria?.categoria}</td>
                         <td className="px-4 py-2 text-sm">
-                          <img src={p.imagen} alt={p.producto} className="h-10 w-10 object-cover rounded"/>
+                          <img 
+                            src={
+                              p.imagen && p.imagen.startsWith('http') 
+                                ? p.imagen 
+                                : `${import.meta.env.VITE_API_URL.replace('/api', '')}${p.imagen || ''}`
+                            } 
+                            alt={p.producto} 
+                            className="h-10 w-10 object-cover rounded"
+                          />
                         </td>
                         <td className="px-4 py-2 text-sm">
                           <label className="inline-flex items-center gap-2">

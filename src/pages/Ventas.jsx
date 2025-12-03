@@ -210,9 +210,21 @@ export default function Ventas() {
                 <div className="w-24 h-24 bg-gray-200 rounded-lg flex items-center justify-center text-gray-500 text-sm mb-2">
                   {p.imagen ? (
                     <img
-                      src={p.imagen}
+                      // LÓGICA INTELIGENTE:
+                      // 1. Si la imagen empieza con "http", es de Cloudinary (Úsala directo).
+                      // 2. Si no, es una imagen antigua local (Agrégale el dominio del backend).
+                      src={
+                        p.imagen.startsWith('http') 
+                          ? p.imagen 
+                          : `${import.meta.env.VITE_API_URL.replace('/api', '')}${p.imagen}`
+                      }
                       alt={p.producto}
                       className="w-full h-full object-cover rounded-lg"
+                      // Añade esto para manejar errores de imágenes rotas antiguas
+                      onError={(e) => {
+                        e.target.onerror = null; 
+                        e.target.src = "https://via.placeholder.com/150?text=Sin+Imagen";
+                      }}
                     />
                   ) : (
                     "Sin Imagen"
